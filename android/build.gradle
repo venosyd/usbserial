@@ -1,54 +1,36 @@
 group 'dev.bessems.usbserial'
 version '1.0'
 
-buildscript {
-    repositories {
-        google()
-        jcenter()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
-    }
-}
-
+// O UsbSerial do felHR85 só existe no JitPack, e quem resolve as dependências
+// transitivas da lib é o app: por isso o repositório vai para todos os projetos.
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url "https://jitpack.io" }
     }
-
-    gradle.projectsEvaluated {
-        tasks.withType(JavaCompile) {
-            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-        }
-    }
-
 }
 
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 33
-    
     namespace 'dev.bessems.usbserial'
+    compileSdk 36
 
     defaultConfig {
-        minSdkVersion 16
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-    lintOptions {
-        disable 'InvalidPackage'
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        minSdk 16
     }
 
+    lint {
+        disable 'InvalidPackage'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
 }
 
 dependencies {
     implementation 'com.github.felHR85:UsbSerial:6.1.0'
 }
-
